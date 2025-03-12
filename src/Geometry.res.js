@@ -25,6 +25,50 @@ function sq(x) {
   return x * x;
 }
 
+function minus(p1, p2) {
+  return {
+          dx: p1.x - p2.x,
+          dy: p1.y - p2.y,
+          dz: p1.z - p2.z
+        };
+}
+
+function add(v1, v2) {
+  return {
+          dx: v1.dx + v2.dx,
+          dy: v1.dy + v2.dy,
+          dz: v1.dz + v2.dz
+        };
+}
+
+function dot(v1, v2) {
+  return v1.dx * v2.dx + v1.dy * v2.dy + v1.dz * v2.dz;
+}
+
+function cross(v1, v2) {
+  return {
+          dx: v1.dy * v2.dz - v1.dz * v2.dy,
+          dy: v1.dz * v2.dx - v1.dx * v2.dz,
+          dz: v1.dx * v2.dy - v1.dy * v2.dx
+        };
+}
+
+function scale(f, v) {
+  return {
+          dx: f * v.dx,
+          dy: f * v.dy,
+          dz: f * v.dz
+        };
+}
+
+function plus(p, v) {
+  return {
+          x: p.x + v.dx,
+          y: p.y + v.dy,
+          z: p.z + v.dz
+        };
+}
+
 function magnitude(v) {
   var x = v.dx;
   var x$1 = v.dy;
@@ -32,12 +76,20 @@ function magnitude(v) {
   return Math.sqrt(x * x + x$1 * x$1 + x$2 * x$2);
 }
 
-function minus(p1, p2) {
+function negate(param) {
   return {
-          dx: p1.x - p2.x,
-          dy: p1.y - p2.y,
-          dz: p1.z - p2.z
+          dx: -1.0 * param.dx,
+          dy: -1.0 * param.dy,
+          dz: -1.0 * param.dz
         };
+}
+
+function normalize(v) {
+  return scale(1.0 / magnitude(v), v);
+}
+
+function angle(v1, v2) {
+  return Math.acos(dot(v1, v2) / (magnitude(v1) * magnitude(v2)));
 }
 
 var e = 2.71828;
@@ -50,7 +102,15 @@ export {
   pointEq ,
   vectorEq ,
   sq ,
-  magnitude ,
   minus ,
+  add ,
+  dot ,
+  cross ,
+  scale ,
+  plus ,
+  magnitude ,
+  negate ,
+  normalize ,
+  angle ,
 }
 /* No side effect */
