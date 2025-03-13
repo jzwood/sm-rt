@@ -92,6 +92,25 @@ function angle(v1, v2) {
   return Math.acos(dot(v1, v2) / (magnitude(v1) * magnitude(v2)));
 }
 
+function getNormalSphere(p, param) {
+  return normalize(minus(p, param.center));
+}
+
+function getPlaneNormal(param) {
+  return param.normal;
+}
+
+function raySphereIntersection(r, s) {
+  var nd = normalize(r.vector);
+  var l = minus(s.center, r.point);
+  var ml = magnitude(l);
+  var tb = dot(nd, l);
+  plus(r.point, scale(tb, nd));
+  var x = s.radius;
+  var deltaSq = x * x - ml * ml + tb * tb;
+  plus(r.point, scale(tb - Math.sqrt(deltaSq), nd));
+}
+
 var e = 2.71828;
 
 var epsilon = 0.0001;
@@ -112,5 +131,8 @@ export {
   negate ,
   normalize ,
   angle ,
+  getNormalSphere ,
+  getPlaneNormal ,
+  raySphereIntersection ,
 }
 /* No side effect */

@@ -97,3 +97,20 @@ let normalize = (v: vector) : vector
 
 let angle = (v1: vector, v2: vector) : float
   => Math.acos(dot(v1, v2) /. (magnitude(v1) *. magnitude(v2)))
+
+let getNormalSphere = (p: point, {center}: sphere) : vector
+  => normalize(minus(p, center))
+
+let getPlaneNormal = ({ normal }:plane) : vector => normal
+
+let raySphereIntersection = (r: ray, s: sphere) : option<(point, sphere)>
+  => {
+    let nd = normalize(r.vector)
+    let l = minus(s.center, r.point)
+    let ml = magnitude(l)
+    let tb = dot(nd, l)
+    let b = plus(r.point, scale(tb, nd))
+    let deltaSq = sq(s.radius) -. sq(ml) +. sq(tb)
+    let x = plus(r.point, scale(tb -. (Math.sqrt(deltaSq)), nd))
+    None
+  }
