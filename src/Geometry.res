@@ -20,12 +20,18 @@ type ray = {
   vector: vector,
 }
 
+type rgb = (int, int, int)
+let black: rgb = (0, 0, 0)
+let white: rgb = (255, 255, 255)
+
 type sphere = {
+  color: rgb,
   center: point,
   radius: float,
 }
 
 type plane = {
+  color: rgb,
   center: point,
   point: point,
   normal: vector,
@@ -37,8 +43,10 @@ type triangle = {
   p3: point,
 }
 
-type lightSource = point
-type eye = point
+type scene = {
+  spheres: array<sphere>,
+  planes: array<plane>,
+}
 
 type window = {
   wNormal: ray,
@@ -59,10 +67,6 @@ let vectorEq = (v1: vector, v2: vector): bool =>
   [v1.dx -. v2.dx, v1.dy -. v2.dy, v1.dz -. v2.dz]->Array.every(x => Math.abs(x) < epsilon)
 
 let sq = (x: float): float => x *. x
-
-let magnitude = (v: vector): float => Math.sqrt(sq(v.dx) +. sq(v.dy) +. sq(v.dz))
-
-let vectorGt = (v1: vector, v2: vector): bool => magnitude(v1) > magnitude(v2)
 
 let minus = (p1: point, p2: point): vector => {
   dx: p1.x -. p2.x,
@@ -104,6 +108,10 @@ let negate = ({dx, dy, dz}: vector): vector => {
   dz: -1.0 *. dz,
 }
 
+let magnitude = (v: vector): float => Math.sqrt(dot(v, v))
+let ord = (v: vector): float => dot(v, v)
+let vectorGt = (v1: vector, v2: vector): bool => ord(v1) > ord(v2)
+
 let normalize = (v: vector): vector => scale(1.0 /. magnitude(v), v)
 
 let angle = (v1: vector, v2: vector): float =>
@@ -127,7 +135,7 @@ let raySphereIntersection = (r: ray, s: sphere): option<(point, sphere)> => {
     None
   } else if deltaSq == 0.0 {
     // 1 intersection
-    Some((b, s))
+    Some(b, s)
   } else if ml < s.radius {
     // ray is inside sphere
     None
@@ -139,17 +147,17 @@ let raySphereIntersection = (r: ray, s: sphere): option<(point, sphere)> => {
   }
 }
 
-let rayPlaneIntersection = (r: ray, p: plane): option<point> => {
+let rayPlaneIntersection = (r: ray, p: plane): option<(point, plane)> => {
   let nn = normalize(p.normal)
   let nd = normalize(r.vector)
   let tnum = minus(p.center, r.point)->dot(nn)
   let tden = dot(nd, nn)
   let t = tnum /. tden
-  let p = plus(r.point, scale(t, nd))
   if tnum == 0.0 || tden == 0.0 || t < 0.0 {
     None
   } else {
-    Some(p)
+    let i = plus(r.point, scale(t, nd))
+    Some(i, p)
   }
 }
 
@@ -177,4 +185,36 @@ let pixelToRay = (x: float, y: float, eye: point, w: window): ray => {
     point,
     vector: minus(point, eye)->normalize,
   }
+}
+
+let scaleRGB = (percent: float, (r, g, b)): rgb => {
+  let f = (color: int): int =>
+    (percent *. Float.fromInt(color))
+    ->Math.round
+    ->Int.fromFloat
+  (f(r), f(g), f(b))
+}
+
+let snap = (digits: float, {x, y, z}: point): point => {
+  let t = Math.pow(10.0, ~exp=digits)
+  let prec = (n: float) => Math.round(n *. t) /. t
+  {x: prec(x), y: prec(y), z: prec(z)}
+}
+
+let bounce = (sight: ray, {spheres, planes}: scene): rgb => {
+  let sphereIntersections = spheres
+    ->Array.map(raySphereIntersection(sight, ...))
+    ->Array.keepSome
+  let planeIntersections = planes
+    ->Array.map(rayPlaneIntersection(sight, ...))
+    ->Array.keepSome
+
+  black
+}
+
+let renderScene = (eye: point, scene: scene, window: window, x: float, y: float): rgb => {
+  pixelToRay(x, y, eye, window)->bounce(scene)
+  //->Option.map(snap(6.0, ...))
+  //->Option.map(calculateColor(eye, scene, ...))
+  //->Option.getOr(black)
 }

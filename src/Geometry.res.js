@@ -3,6 +3,12 @@
 import * as Caml_obj from "rescript/lib/es6/caml_obj.js";
 import * as Core__Array from "@rescript/core/src/Core__Array.res.js";
 
+var black = [
+  0,
+  0,
+  0
+];
+
 function pointEq(p1, p2) {
   return [
             p1.x - p2.x,
@@ -25,17 +31,6 @@ function vectorEq(v1, v2) {
 
 function sq(x) {
   return x * x;
-}
-
-function magnitude(v) {
-  var x = v.dx;
-  var x$1 = v.dy;
-  var x$2 = v.dz;
-  return Math.sqrt(x * x + x$1 * x$1 + x$2 * x$2);
-}
-
-function vectorGt(v1, v2) {
-  return magnitude(v1) > magnitude(v2);
 }
 
 function minus(p1, p2) {
@@ -94,6 +89,18 @@ function negate(param) {
         };
 }
 
+function magnitude(v) {
+  return Math.sqrt(dot(v, v));
+}
+
+function ord(v) {
+  return dot(v, v);
+}
+
+function vectorGt(v1, v2) {
+  return dot(v1, v1) > dot(v2, v2);
+}
+
 function normalize(v) {
   return scale(1.0 / magnitude(v), v);
 }
@@ -142,12 +149,14 @@ function rayPlaneIntersection(r, p) {
   var tnum = dot(minus(p.center, r.point), nn);
   var tden = dot(nd, nn);
   var t = tnum / tden;
-  var p$1 = plus(r.point, scale(t, nd));
   if (tnum === 0.0 || tden === 0.0 || t < 0.0) {
     return ;
-  } else {
-    return p$1;
   }
+  var i = plus(r.point, scale(t, nd));
+  return [
+          i,
+          p
+        ];
 }
 
 function pixelToOrigin(param) {
@@ -175,18 +184,61 @@ function pixelToRay(x, y, eye, w) {
         };
 }
 
+function scaleRGB(percent, param) {
+  var f = function (color) {
+    return Math.round(percent * color) | 0;
+  };
+  return [
+          f(param[0]),
+          f(param[1]),
+          f(param[2])
+        ];
+}
+
+function snap(digits, param) {
+  var t = Math.pow(10.0, digits);
+  var prec = function (n) {
+    return Math.round(n * t) / t;
+  };
+  return {
+          x: prec(param.x),
+          y: prec(param.y),
+          z: prec(param.z)
+        };
+}
+
+function bounce(sight, param) {
+  Core__Array.keepSome(param.spheres.map(function (extra) {
+            return raySphereIntersection(sight, extra);
+          }));
+  Core__Array.keepSome(param.planes.map(function (extra) {
+            return rayPlaneIntersection(sight, extra);
+          }));
+  return black;
+}
+
+function renderScene(eye, scene, $$window, x, y) {
+  return bounce(pixelToRay(x, y, eye, $$window), scene);
+}
+
+var white = [
+  255,
+  255,
+  255
+];
+
 var e = 2.71828;
 
 var epsilon = 0.0001;
 
 export {
+  black ,
+  white ,
   e ,
   epsilon ,
   pointEq ,
   vectorEq ,
   sq ,
-  magnitude ,
-  vectorGt ,
   minus ,
   add ,
   dot ,
@@ -195,6 +247,9 @@ export {
   plus ,
   plusAll ,
   negate ,
+  magnitude ,
+  ord ,
+  vectorGt ,
   normalize ,
   angle ,
   getNormalSphere ,
@@ -203,5 +258,9 @@ export {
   rayPlaneIntersection ,
   pixelToOrigin ,
   pixelToRay ,
+  scaleRGB ,
+  snap ,
+  bounce ,
+  renderScene ,
 }
 /* No side effect */
