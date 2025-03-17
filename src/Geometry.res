@@ -121,7 +121,7 @@ let getNormalSphere = (p: point, {center}: sphere): vector => normalize(minus(p,
 
 let getPlaneNormal = ({normal}: plane): vector => normal
 
-let raySphereIntersection = (r: ray, s: sphere): option<(point, sphere)> => {
+let raySphereIntersection = (r: ray, s: sphere): option<(float, rgb)> => {
   let nd = normalize(r.vector)
   let l = minus(s.center, r.point)
   let ml = magnitude(l)
@@ -135,7 +135,8 @@ let raySphereIntersection = (r: ray, s: sphere): option<(point, sphere)> => {
     None
   } else if deltaSq == 0.0 {
     // 1 intersection
-    Some(b, s)
+    let d = minus(r.point, b)->ord
+    Some(d, s.color)
   } else if ml < s.radius {
     // ray is inside sphere
     None
@@ -143,11 +144,12 @@ let raySphereIntersection = (r: ray, s: sphere): option<(point, sphere)> => {
     // ray points in wrong direction
     None
   } else {
-    Some(x, s)
+    let d = minus(r.point, x)->ord
+    Some(d, s.color)
   }
 }
 
-let rayPlaneIntersection = (r: ray, p: plane): option<(point, plane)> => {
+let rayPlaneIntersection = (r: ray, p: plane): option<(float, rgb)> => {
   let nn = normalize(p.normal)
   let nd = normalize(r.vector)
   let tnum = minus(p.center, r.point)->dot(nn)
@@ -157,7 +159,8 @@ let rayPlaneIntersection = (r: ray, p: plane): option<(point, plane)> => {
     None
   } else {
     let i = plus(r.point, scale(t, nd))
-    Some(i, p)
+    let d = minus(r.point, i)->ord
+    Some(d, p.color)
   }
 }
 
@@ -202,14 +205,15 @@ let snap = (digits: float, {x, y, z}: point): point => {
 }
 
 let bounce = (sight: ray, {spheres, planes}: scene): rgb => {
-  let sphereIntersections = spheres
-    ->Array.map(raySphereIntersection(sight, ...))
-    ->Array.keepSome
-  let planeIntersections = planes
-    ->Array.map(rayPlaneIntersection(sight, ...))
-    ->Array.keepSome
-
-  black
+  [
+    ...Array.map(spheres, raySphereIntersection(sight, ...)),
+    ...Array.map(planes, rayPlaneIntersection(sight, ...)),
+  ]
+  ->Array.keepSome
+  ->Array.toSorted(((d1, _), (d2, _)) => Float.compare(d1, d2)) // rewrite to be minimum O(n) instead of sort O(nlogn)
+  ->Array.map(((_, color)) => color)
+  ->Array.get(0)
+  ->Option.getOr(black)
 }
 
 let renderScene = (eye: point, scene: scene, window: window, x: float, y: float): rgb => {
