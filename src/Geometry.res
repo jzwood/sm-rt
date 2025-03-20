@@ -38,6 +38,7 @@ type plane = {
 }
 
 type triangle = {
+  color: rgb,
   p1: point,
   p2: point,
   p3: point,
@@ -45,6 +46,7 @@ type triangle = {
 
 type scene = {
   spheres: array<sphere>,
+  triangles: array<triangle>,
   planes: array<plane>,
 }
 
@@ -164,6 +166,29 @@ let rayPlaneIntersection = (r: ray, p: plane): option<(float, rgb)> => {
   }
 }
 
+let rayTriangleIntersection = (r: ray, {p1, p2, p3, color}: triangle): option<(float, rgb)> => {
+  let e1 = minus(p2, p1)
+  let e2 = minus(p3, p1)
+  let d = r.vector
+  let pv = cross(d, e2)
+  let tv = minus(r.point, p1)
+  let qv = cross(tv, e1)
+  let det = dot(pv, e1)
+  let inv_det = 1.0 /. det
+  let u = inv_det *. dot(pv, tv)
+  let v = inv_det *. dot(qv, d)
+  let t = inv_det *. dot(qv, e2)
+  if Math.abs(det) < epsilon {
+    None
+  } else if u < 0.0 || u > 1.0 {
+    None
+  } else if v < 0.0 || u > 1.0 {
+    None
+  } else {
+    Some(t, color)
+  }
+}
+
 let pixelToOrigin = (
   {wNormal: {point: origin, vector: normal}, up, width, height}: window,
 ): point => {
@@ -204,21 +229,17 @@ let snap = (digits: float, {x, y, z}: point): point => {
   {x: prec(x), y: prec(y), z: prec(z)}
 }
 
-let bounce = (sight: ray, {spheres, planes}: scene): rgb => {
+let rayToColor = (sight: ray, {spheres, planes}: scene): rgb => {
   [
     ...Array.map(spheres, raySphereIntersection(sight, ...)),
     ...Array.map(planes, rayPlaneIntersection(sight, ...)),
   ]
   ->Array.keepSome
-  ->Array.toSorted(((d1, _), (d2, _)) => Float.compare(d1, d2)) // rewrite to be minimum O(n) instead of sort O(nlogn)
-  ->Array.map(((_, color)) => color)
-  ->Array.get(0)
+  ->Utils.smallest(((dist, _)) => dist)
+  ->Option.map(((_, color)) => color)
   ->Option.getOr(black)
 }
 
 let renderScene = (eye: point, scene: scene, window: window, x: float, y: float): rgb => {
-  pixelToRay(x, y, eye, window)->bounce(scene)
-  //->Option.map(snap(6.0, ...))
-  //->Option.map(calculateColor(eye, scene, ...))
-  //->Option.getOr(black)
+  pixelToRay(x, y, eye, window)->rayToColor(scene)
 }

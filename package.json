@@ -1,11 +1,15 @@
 {
   "name": "yart",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "res:build": "rescript",
     "res:clean": "rescript clean",
     "res:dev": "rescript -w",
-    "res:format": "rescript format src/*.res"
+    "res:format": "rescript format src/*.res",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "keywords": [
     "rescript"
@@ -15,5 +19,9 @@
   "dependencies": {
     "@rescript/core": "^1.6.1",
     "rescript": "^11.1.4"
+  },
+  "devDependencies": {
+    "vite": "^6.2.0"
   }
 }
+
