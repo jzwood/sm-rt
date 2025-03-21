@@ -122,18 +122,18 @@ function getPlaneNormal(param) {
 
 function raySphereIntersection(r, s) {
   var nd = normalize(r.vector);
-  var l = minus(s.center, r.point);
+  var l = minus(s.center, r.origin);
   var ml = magnitude(l);
   var tb = dot(nd, l);
-  var b = plus(r.point, scale(tb, nd));
+  var b = plus(r.origin, scale(tb, nd));
   var x = s.radius;
   var deltaSq = x * x - ml * ml + tb * tb;
-  var x$1 = plus(r.point, scale(tb - Math.sqrt(deltaSq), nd));
+  var x$1 = plus(r.origin, scale(tb - Math.sqrt(deltaSq), nd));
   if (deltaSq < 0.0) {
     return;
   }
   if (deltaSq === 0.0) {
-    var v = minus(r.point, b);
+    var v = minus(r.origin, b);
     var d = dot(v, v);
     return [
       d,
@@ -143,10 +143,10 @@ function raySphereIntersection(r, s) {
   if (ml < s.radius) {
     return;
   }
-  if (Caml_obj.notequal(normalize(minus(x$1, r.point)), nd)) {
+  if (Caml_obj.notequal(normalize(minus(x$1, r.origin)), nd)) {
     return;
   }
-  var v$1 = minus(r.point, x$1);
+  var v$1 = minus(r.origin, x$1);
   var d$1 = dot(v$1, v$1);
   return [
     d$1,
@@ -157,14 +157,14 @@ function raySphereIntersection(r, s) {
 function rayPlaneIntersection(r, p) {
   var nn = normalize(p.normal);
   var nd = normalize(r.vector);
-  var tnum = dot(minus(p.center, r.point), nn);
+  var tnum = dot(minus(p.center, r.origin), nn);
   var tden = dot(nd, nn);
   var t = tnum / tden;
   if (tnum === 0.0 || tden === 0.0 || t < 0.0) {
     return;
   }
-  var i = plus(r.point, scale(t, nd));
-  var v = minus(r.point, i);
+  var i = plus(r.origin, scale(t, nd));
+  var v = minus(r.origin, i);
   var d = dot(v, v);
   return [
     d,
@@ -178,7 +178,7 @@ function rayTriangleIntersection(r, param) {
   var e2 = minus(param.p3, p1);
   var d = r.vector;
   var pv = cross(d, e2);
-  var tv = minus(r.point, p1);
+  var tv = minus(r.origin, p1);
   var qv = cross(tv, e1);
   var det = dot(pv, e1);
   var inv_det = 1.0 / det;
@@ -197,10 +197,10 @@ function rayTriangleIntersection(r, param) {
 
 function pixelToOrigin(param) {
   var up = param.up;
-  var match = param.wNormal;
+  var match = param.normal;
   var left = normalize(cross(up, match.vector));
   var nUp = normalize(up);
-  return plusAll(match.point, [
+  return plusAll(match.origin, [
     scale(0.5 * param.width, left),
     scale(0.5 * param.height, nUp),
   ]);
@@ -208,14 +208,14 @@ function pixelToOrigin(param) {
 
 function pixelToRay(x, y, eye, w) {
   var topLeft = pixelToOrigin(w);
-  var right = negate(normalize(cross(w.up, w.wNormal.vector)));
+  var right = negate(normalize(cross(w.up, w.normal.vector)));
   var down = normalize(negate(w.up));
   var point = plusAll(topLeft, [
     scale(x / (w.pxWidth - 1.0) * w.width, right),
     scale(y / (w.pxHeight - 1.0) * w.height, down),
   ]);
   return {
-    point: point,
+    origin: point,
     vector: normalize(minus(point, eye)),
   };
 }

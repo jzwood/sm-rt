@@ -16,7 +16,7 @@ type vector = {
 }
 
 type ray = {
-  point: point,
+  origin: point,
   vector: vector,
 }
 
@@ -33,7 +33,6 @@ type sphere = {
 type plane = {
   color: rgb,
   center: point,
-  point: point,
   normal: vector,
 }
 
@@ -51,7 +50,7 @@ type scene = {
 }
 
 type window = {
-  wNormal: ray,
+  normal: ray,
   up: vector,
   width: float,
   height: float,
@@ -125,28 +124,28 @@ let getPlaneNormal = ({normal}: plane): vector => normal
 
 let raySphereIntersection = (r: ray, s: sphere): option<(float, rgb)> => {
   let nd = normalize(r.vector)
-  let l = minus(s.center, r.point)
+  let l = minus(s.center, r.origin)
   let ml = magnitude(l)
   let tb = dot(nd, l)
-  let b = plus(r.point, scale(tb, nd))
+  let b = plus(r.origin, scale(tb, nd))
   let deltaSq = sq(s.radius) -. sq(ml) +. sq(tb)
-  let x = plus(r.point, scale(tb -. Math.sqrt(deltaSq), nd))
+  let x = plus(r.origin, scale(tb -. Math.sqrt(deltaSq), nd))
 
   if deltaSq < 0.0 {
     // no intersection
     None
   } else if deltaSq == 0.0 {
     // 1 intersection
-    let d = minus(r.point, b)->ord
+    let d = minus(r.origin, b)->ord
     Some(d, s.color)
   } else if ml < s.radius {
     // ray is inside sphere
     None
-  } else if normalize(minus(x, r.point)) != nd {
+  } else if normalize(minus(x, r.origin)) != nd {
     // ray points in wrong direction
     None
   } else {
-    let d = minus(r.point, x)->ord
+    let d = minus(r.origin, x)->ord
     Some(d, s.color)
   }
 }
@@ -154,14 +153,14 @@ let raySphereIntersection = (r: ray, s: sphere): option<(float, rgb)> => {
 let rayPlaneIntersection = (r: ray, p: plane): option<(float, rgb)> => {
   let nn = normalize(p.normal)
   let nd = normalize(r.vector)
-  let tnum = minus(p.center, r.point)->dot(nn)
+  let tnum = minus(p.center, r.origin)->dot(nn)
   let tden = dot(nd, nn)
   let t = tnum /. tden
   if tnum == 0.0 || tden == 0.0 || t < 0.0 {
     None
   } else {
-    let i = plus(r.point, scale(t, nd))
-    let d = minus(r.point, i)->ord
+    let i = plus(r.origin, scale(t, nd))
+    let d = minus(r.origin, i)->ord
     Some(d, p.color)
   }
 }
@@ -171,7 +170,7 @@ let rayTriangleIntersection = (r: ray, {p1, p2, p3, color}: triangle): option<(f
   let e2 = minus(p3, p1)
   let d = r.vector
   let pv = cross(d, e2)
-  let tv = minus(r.point, p1)
+  let tv = minus(r.origin, p1)
   let qv = cross(tv, e1)
   let det = dot(pv, e1)
   let inv_det = 1.0 /. det
@@ -190,7 +189,7 @@ let rayTriangleIntersection = (r: ray, {p1, p2, p3, color}: triangle): option<(f
 }
 
 let pixelToOrigin = (
-  {wNormal: {point: origin, vector: normal}, up, width, height}: window,
+  {normal: {origin: origin, vector: normal}, up, width, height}: window,
 ): point => {
   let left = cross(up, normal)->normalize
   let nUp = normalize(up)
@@ -200,7 +199,7 @@ let pixelToOrigin = (
 
 let pixelToRay = (x: float, y: float, eye: point, w: window): ray => {
   let topLeft = pixelToOrigin(w)
-  let right = cross(w.up, w.wNormal.vector)->normalize->negate
+  let right = cross(w.up, w.normal.vector)->normalize->negate
   let down = w.up->negate->normalize
   let point = plusAll(
     topLeft,
@@ -210,7 +209,7 @@ let pixelToRay = (x: float, y: float, eye: point, w: window): ray => {
     ],
   )
   {
-    point,
+    origin: point,
     vector: minus(point, eye)->normalize,
   }
 }
