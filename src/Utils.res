@@ -9,3 +9,9 @@ let smallest = (arr: array<'a>, size: 'a => float): option<'a> => {
     })
   )
 }
+
+
+let inspect = (x: 'a) : 'a => {
+  Console.log(x)
+  x
+}
