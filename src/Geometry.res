@@ -58,26 +58,26 @@ type window = {
   pxHeight: float,
 }
 
-let windowTest : window = {
-    normal: {
-      origin: { x: 5.2, y: 4.5, z: -5.0 },
-      vector: { dx: 0.0, dy: 0.0, dz: -1.0 },
-    },
-    up: { dx: 0.0, dy: 1.0, dz: 0.0 },
-    width: 4.0,
-    height: 2.5,
-    pxWidth: 8.0,
-    pxHeight: 5.0,
+let windowTest: window = {
+  normal: {
+    origin: {x: 5.2, y: 4.5, z: -5.0},
+    vector: {dx: 0.0, dy: 0.0, dz: -1.0},
+  },
+  up: {dx: 0.0, dy: 1.0, dz: 0.0},
+  width: 4.0,
+  height: 2.5,
+  pxWidth: 8.0,
+  pxHeight: 5.0,
 }
 
 let e = 2.71828 // euler's number
 let epsilon = 0.0001
 
 //let pointEq = (p1: point, p2: point): bool =>
-  //[p1.x -. p2.x, p1.y -. p2.y, p1.z -. p2.z]->Array.every(x => Math.abs(x) < epsilon)
+//[p1.x -. p2.x, p1.y -. p2.y, p1.z -. p2.z]->Array.every(x => Math.abs(x) < epsilon)
 
 //let vectorEq = (v1: vector, v2: vector): bool =>
-  //[v1.dx -. v2.dx, v1.dy -. v2.dy, v1.dz -. v2.dz]->Array.every(x => Math.abs(x) < epsilon)
+//[v1.dx -. v2.dx, v1.dy -. v2.dy, v1.dz -. v2.dz]->Array.every(x => Math.abs(x) < epsilon)
 
 let sq = (x: float): float => x *. x
 
@@ -135,13 +135,13 @@ let getNormalSphere = (p: point, {center}: sphere): vector => normalize(minus(p,
 let getPlaneNormal = ({normal}: plane): vector => normal
 
 let raySphereIntersection = (r: ray, s: sphere): option<(float, rgb)> => {
-  let nd : vector = normalize(r.vector)
-  let l : vector  = minus(s.center, r.origin)
-  let ml : float = magnitude(l)
-  let tb : float = dot(nd, l)
-  let b : point = plus(r.origin, scale(tb, nd))
-  let deltaSq : float = sq(s.radius) -. sq(ml) +. sq(tb)
-  let x : point = plus(r.origin, scale(tb -. Math.sqrt(deltaSq), nd))
+  let nd: vector = normalize(r.vector)
+  let l: vector = minus(s.center, r.origin)
+  let ml: float = magnitude(l)
+  let tb: float = dot(nd, l)
+  let b: point = plus(r.origin, scale(tb, nd))
+  let deltaSq: float = sq(s.radius) -. sq(ml) +. sq(tb)
+  let x: point = plus(r.origin, scale(tb -. Math.sqrt(deltaSq), nd))
 
   if deltaSq < 0.0 {
     // no intersection
@@ -163,16 +163,16 @@ let raySphereIntersection = (r: ray, s: sphere): option<(float, rgb)> => {
 }
 
 let rayPlaneIntersection = (r: ray, p: plane): option<(float, rgb)> => {
-  let nn : vector = normalize(p.normal)
-  let nd : vector = normalize(r.vector)
-  let tnum : float = minus(p.center, r.origin)->dot(nn)
-  let tden : float = dot(nd, nn)
-  let t : float = tnum /. tden
+  let nn: vector = normalize(p.normal)
+  let nd: vector = normalize(r.vector)
+  let tnum: float = minus(p.center, r.origin)->dot(nn)
+  let tden: float = dot(nd, nn)
+  let t: float = tnum /. tden
   if tnum == 0.0 || tden == 0.0 || t < 0.0 {
     None
   } else {
-    let i : point = plus(r.origin, scale(t, nd))
-    let d : float  = minus(r.origin, i)->ord
+    let i: point = plus(r.origin, scale(t, nd))
+    let d: float = minus(r.origin, i)->ord
     Some(d, p.color)
   }
 }
@@ -200,9 +200,7 @@ let rayTriangleIntersection = (r: ray, {p1, p2, p3, color}: triangle): option<(f
   }
 }
 
-let windowToOrigin = (
-  {normal: {origin: origin, vector: normal}, up, width, height}: window,
-): point => {
+let windowToOrigin = ({normal: {origin, vector: normal}, up, width, height}: window): point => {
   let left = cross(up, normal)->normalize
   let up = normalize(up)
   // top left
@@ -216,14 +214,11 @@ let pixelToRay = (x: float, y: float, eye: point, w: window): ray => {
   let point = plusAll(
     topLeft,
     [
-      scale((x /. (w.pxWidth -. 1.0)) *. w.width, right),
-      scale((y /. (w.pxHeight -. 1.0)) *. w.height, down),
+      scale(x /. (w.pxWidth -. 1.0) *. w.width, right),
+      scale(y /. (w.pxHeight -. 1.0) *. w.height, down),
     ],
   )
 
-  Console.log(point)
-  Console.log(eye)
-  Console.log(minus(point, eye))
   {
     origin: point,
     vector: minus(point, eye)->normalize,

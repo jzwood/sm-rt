@@ -194,9 +194,6 @@ function pixelToRay(x, y, eye, w) {
         scale(x / (w.pxWidth - 1.0) * w.width, right),
         scale(y / (w.pxHeight - 1.0) * w.height, down)
       ]);
-  console.log(point);
-  console.log(eye);
-  console.log(minus(point, eye));
   return {
           origin: point,
           vector: normalize(minus(point, eye))
