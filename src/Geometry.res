@@ -76,8 +76,10 @@ let epsilon = 0.0001
 //let pointEq = (p1: point, p2: point): bool =>
 //[p1.x -. p2.x, p1.y -. p2.y, p1.z -. p2.z]->Array.every(x => Math.abs(x) < epsilon)
 
-//let vectorEq = (v1: vector, v2: vector): bool =>
-//[v1.dx -. v2.dx, v1.dy -. v2.dy, v1.dz -. v2.dz]->Array.every(x => Math.abs(x) < epsilon)
+let vectorEq = (v1: vector, v2: vector): bool =>
+  [v1.dx -. v2.dx, v1.dy -. v2.dy, v1.dz -. v2.dz]->Array.every(x => Math.abs(x) < epsilon)
+
+//let vectorNeq = (v1: vector, v2: vector) : bool => !vectorEq(v1, v2)
 
 let sq = (x: float): float => x *. x
 
@@ -153,7 +155,7 @@ let raySphereIntersection = (r: ray, s: sphere): option<(float, rgb)> => {
   } else if ml < s.radius {
     // ray is inside sphere
     None
-  } else if normalize(minus(x, r.origin)) != nd {
+  } else if !vectorEq(normalize(minus(x, r.origin)), nd) {
     // ray points in wrong direction
     None
   } else {
@@ -250,6 +252,7 @@ let rayToColor = (sight: ray, {spheres, planes}: scene): rgb => {
   ->Option.getOr(black)
 }
 
+// rename to getPixel
 let renderScene = (eye: point, scene: scene, window: window, x: float, y: float): rgb => {
   pixelToRay(x, y, eye, window)->rayToColor(scene)
 }
