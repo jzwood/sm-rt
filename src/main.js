@@ -3,10 +3,10 @@ import { getPixel, renderScene } from "./Geometry.res.js";
 function main() {
   console.log("hi mom");
 
-  const eye = { x: 5, y: 5, z: 0 };
+  const eye = { x: 5, y: 4.5, z: -1.5 };
   const spheres = [
     { color: [255, 0, 0], center: { x: 5, y: 5, z: -20 }, radius: 5 },
-    { color: [0, 255, 0], center: { x: 13, y: 2, z: -19 }, radius: 2 },
+    { color: [0, 255, 0], center: { x: 5, y: 3, z: -17 }, radius: 2 },
   ];
   const planes = [{
     color: [0, 0, 255],
@@ -40,7 +40,7 @@ function main() {
   canvas.width = width;
   canvas.height = height;
   canvas.style.transform = `scale(${scale})`;
-  const pan = 0.05;
+  const pan = 0.1;
 
   const ctx = canvas.getContext("2d", { alpha: false });
 
@@ -51,16 +51,34 @@ function main() {
   document.addEventListener("keydown", (e) => {
     e.preventDefault();
     switch (e.key) {
+      case "ArrowDown": {
+        //w.normal.origin.x -= pan;
+        //eye.x -= pan;
+        spheres[1].center.y -= pan;
+        renderScene(imageData.data, scene, eye, w);
+        ctx.putImageData(imageData, 0, 0);
+        break;
+      }
+      case "ArrowUp": {
+        //w.normal.origin.x -= pan;
+        //eye.x -= pan;
+        spheres[1].center.y += pan;
+        renderScene(imageData.data, scene, eye, w);
+        ctx.putImageData(imageData, 0, 0);
+        break;
+      }
       case "ArrowLeft": {
         //w.normal.origin.x -= pan;
-        eye.x -= pan;
+        //eye.x -= pan;
+        spheres[1].center.x -= pan;
         renderScene(imageData.data, scene, eye, w);
         ctx.putImageData(imageData, 0, 0);
         break;
       }
       case "ArrowRight": {
         //w.normal.origin.x += pan;
-        eye.x += pan;
+        //eye.x += pan;
+        spheres[1].center.x += pan;
         renderScene(imageData.data, scene, eye, w);
         ctx.putImageData(imageData, 0, 0);
         break;
