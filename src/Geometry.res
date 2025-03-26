@@ -54,20 +54,8 @@ type window = {
   up: vector,
   width: float,
   height: float,
-  pxWidth: float,
-  pxHeight: float,
-}
-
-let windowTest: window = {
-  normal: {
-    origin: {x: 5.2, y: 4.5, z: -5.0},
-    vector: {dx: 0.0, dy: 0.0, dz: -1.0},
-  },
-  up: {dx: 0.0, dy: 1.0, dz: 0.0},
-  width: 4.0,
-  height: 2.5,
-  pxWidth: 8.0,
-  pxHeight: 5.0,
+  pxWidth: int,
+  pxHeight: int,
 }
 
 let e = 2.71828 // euler's number
@@ -209,15 +197,15 @@ let windowToOrigin = ({normal: {origin, vector: normal}, up, width, height}: win
   plusAll(origin, [scale(0.5 *. width, left), scale(0.5 *. height, up)])
 }
 
-let pixelToRay = (x: float, y: float, eye: point, w: window): ray => {
+let pixelToRay = (x: int, y: int, eye: point, w: window): ray => {
   let topLeft = windowToOrigin(w)
   let right = cross(w.up, w.normal.vector)->normalize->negate
   let down = w.up->normalize->negate
   let point = plusAll(
     topLeft,
     [
-      scale(x /. (w.pxWidth -. 1.0) *. w.width, right),
-      scale(y /. (w.pxHeight -. 1.0) *. w.height, down),
+      scale(Int.toFloat(x) /. Int.toFloat(w.pxWidth - 1) *. w.width, right),
+      scale(Int.toFloat(y) /. Int.toFloat(w.pxHeight - 1) *. w.height, down),
     ],
   )
 
@@ -252,7 +240,19 @@ let rayToColor = (sight: ray, {spheres, planes}: scene): rgb => {
   ->Option.getOr(black)
 }
 
-// rename to getPixel
-let renderScene = (eye: point, scene: scene, window: window, x: float, y: float): rgb => {
+let getPixel = (eye: point, scene: scene, window: window, x: int, y: int): rgb => {
   pixelToRay(x, y, eye, window)->rayToColor(scene)
+}
+
+let renderScene = (arr: Uint8ClampedArray.t, scene: scene, eye: point, window: window) : unit => {
+  for i in 0 to (window.pxWidth - 1) {
+    for j in 0 to (window.pxHeight - 1) {
+      let (r, g, b) = getPixel(eye, scene, window, i, j)
+      let x = (i + j * window.pxWidth) * 4;
+      TypedArray.set(arr, x + 0, r)
+      TypedArray.set(arr, x + 1, g)
+      TypedArray.set(arr, x + 2, b)
+      TypedArray.set(arr, x + 3, 255)
+    }
+  }
 }

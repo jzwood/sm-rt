@@ -200,8 +200,8 @@ function pixelToRay(x, y, eye, w) {
   var right = negate(normalize(cross(w.up, w.normal.vector)));
   var down = negate(normalize(w.up));
   var point = plusAll(topLeft, [
-        scale(x / (w.pxWidth - 1.0) * w.width, right),
-        scale(y / (w.pxHeight - 1.0) * w.height, down)
+        scale(x / (w.pxWidth - 1 | 0) * w.width, right),
+        scale(y / (w.pxHeight - 1 | 0) * w.height, down)
       ]);
   return {
           origin: point,
@@ -247,8 +247,21 @@ function rayToColor(sight, param) {
                   })), black);
 }
 
-function renderScene(eye, scene, $$window, x, y) {
+function getPixel(eye, scene, $$window, x, y) {
   return rayToColor(pixelToRay(x, y, eye, $$window), scene);
+}
+
+function renderScene(arr, scene, eye, $$window) {
+  for(var i = 0 ,i_finish = $$window.pxWidth; i < i_finish; ++i){
+    for(var j = 0 ,j_finish = $$window.pxHeight; j < j_finish; ++j){
+      var match = getPixel(eye, scene, $$window, i, j);
+      var x = ((i + Math.imul(j, $$window.pxWidth) | 0) << 2);
+      arr[x + 0 | 0] = match[0];
+      arr[x + 1 | 0] = match[1];
+      arr[x + 2 | 0] = match[2];
+      arr[x + 3 | 0] = 255;
+    }
+  }
 }
 
 var white = [
@@ -257,30 +270,6 @@ var white = [
   255
 ];
 
-var windowTest = {
-  normal: {
-    origin: {
-      x: 5.2,
-      y: 4.5,
-      z: -5.0
-    },
-    vector: {
-      dx: 0.0,
-      dy: 0.0,
-      dz: -1.0
-    }
-  },
-  up: {
-    dx: 0.0,
-    dy: 1.0,
-    dz: 0.0
-  },
-  width: 4.0,
-  height: 2.5,
-  pxWidth: 8.0,
-  pxHeight: 5.0
-};
-
 var e = 2.71828;
 
 var epsilon = 0.0001;
@@ -288,7 +277,6 @@ var epsilon = 0.0001;
 export {
   black ,
   white ,
-  windowTest ,
   e ,
   epsilon ,
   vectorEq ,
@@ -316,6 +304,7 @@ export {
   scaleRGB ,
   snap ,
   rayToColor ,
+  getPixel ,
   renderScene ,
 }
 /* No side effect */

@@ -21,6 +21,6 @@ let win: Geometry.window = {
   up: {dx: 0.0, dy: 1.0, dz: 0.0},
   width: 4.0,
   height: 2.5,
-  pxWidth: 400.0,
-  pxHeight: 250.0,
+  pxWidth: 400,
+  pxHeight: 250,
 }

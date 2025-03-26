@@ -1,4 +1,4 @@
-import { renderScene } from "./Geometry.res.js";
+import { getPixel, renderScene } from "./Geometry.res.js";
 
 function main() {
   console.log("hi mom");
@@ -16,6 +16,9 @@ function main() {
 
   const scene = { spheres, triangles: [], planes };
 
+  const multiplier = 140
+  const scale = 1
+
   const w = {
     normal: {
       origin: { x: 5.2, y: 4.5, z: -5 },
@@ -24,39 +27,24 @@ function main() {
     up: { dx: 0, dy: 1, dz: 0 },
     width: 4,
     height: 2.5,
-    pxWidth: 400,
-    pxHeight: 250,
+    pxWidth: 8 * multiplier,
+    pxHeight: 5 * multiplier,
   };
 
   const width = w.pxWidth;
   const height = w.pxHeight;
 
-  const res = renderScene(eye, scene, w, 100, 100);
+  const res = getPixel(eye, scene, w, 100, 100);
 
   const canvas = document.getElementById("canvas");
   canvas.width = width;
   canvas.height = height;
-  const scale = 1
-  canvas.style.transformOrigin = 'top left'
   canvas.style.transform = `scale(${scale})`;
 
   const ctx = canvas.getContext("2d", { alpha: true });
-  //const getRgb = renderScene(eye, scene)
 
   const imageData = ctx.createImageData(width, height);
-
-  for (let i = 0; i < width; i++) {
-    for (let j = 0; j < height; j++) {
-      const [r, g, b] = renderScene(eye, scene, w, i, j);
-      const x = (i + j * width) * 4;
-      imageData.data[x + 0] = r; // R value
-      imageData.data[x + 1] = g; // G value
-      imageData.data[x + 2] = b; // B value
-      imageData.data[x + 3] = 255; // A value
-    }
-  }
-
-  // Draw image data to the canvas
+  renderScene(imageData.data, scene, eye, w)
   ctx.putImageData(imageData, 0, 0);
 }
 
