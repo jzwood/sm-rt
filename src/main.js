@@ -3,7 +3,7 @@ import { getPixel, renderScene } from "./Geometry.res.js";
 function main() {
   console.log("hi mom");
 
-  const eye = {x: 5, y: 5, z:0};
+  const eye = { x: 5, y: 5, z: 0 };
   const spheres = [
     { color: [255, 0, 0], center: { x: 5, y: 5, z: -20 }, radius: 5 },
     { color: [0, 255, 0], center: { x: 13, y: 2, z: -19 }, radius: 2 },
@@ -16,8 +16,8 @@ function main() {
 
   const scene = { spheres, triangles: [], planes };
 
-  const multiplier = 140
-  const scale = 1
+  const multiplier = 40;
+  const scale = 3;
 
   const w = {
     normal: {
@@ -40,12 +40,35 @@ function main() {
   canvas.width = width;
   canvas.height = height;
   canvas.style.transform = `scale(${scale})`;
+  const pan = 0.05;
 
-  const ctx = canvas.getContext("2d", { alpha: true });
+  const ctx = canvas.getContext("2d", { alpha: false });
 
   const imageData = ctx.createImageData(width, height);
-  renderScene(imageData.data, scene, eye, w)
+  renderScene(imageData.data, scene, eye, w);
   ctx.putImageData(imageData, 0, 0);
+
+  document.addEventListener("keydown", (e) => {
+    e.preventDefault();
+    switch (e.key) {
+      case "ArrowLeft": {
+        //w.normal.origin.x -= pan;
+        eye.x -= pan;
+        renderScene(imageData.data, scene, eye, w);
+        ctx.putImageData(imageData, 0, 0);
+        break;
+      }
+      case "ArrowRight": {
+        //w.normal.origin.x += pan;
+        eye.x += pan;
+        renderScene(imageData.data, scene, eye, w);
+        ctx.putImageData(imageData, 0, 0);
+        break;
+      }
+      default:
+        break;
+    }
+  });
 }
 
 document.addEventListener("DOMContentLoaded", main);
