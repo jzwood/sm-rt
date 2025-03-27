@@ -50,42 +50,38 @@ function main() {
 
   document.addEventListener("keydown", (e) => {
     e.preventDefault();
+    //console.log(e)
     switch (e.key) {
-      case "ArrowDown": {
-        //w.normal.origin.x -= pan;
-        //eye.x -= pan;
-        spheres[1].center.y -= pan;
-        renderScene(imageData.data, scene, eye, w);
-        ctx.putImageData(imageData, 0, 0);
-        break;
-      }
-      case "ArrowUp": {
-        //w.normal.origin.x -= pan;
-        //eye.x -= pan;
+      case "8": {
         spheres[1].center.y += pan;
-        renderScene(imageData.data, scene, eye, w);
-        ctx.putImageData(imageData, 0, 0);
         break;
       }
-      case "ArrowLeft": {
-        //w.normal.origin.x -= pan;
-        //eye.x -= pan;
+      case "2": {
+        spheres[1].center.y -= pan;
+        break;
+      }
+      case "4": {
         spheres[1].center.x -= pan;
-        renderScene(imageData.data, scene, eye, w);
-        ctx.putImageData(imageData, 0, 0);
         break;
       }
-      case "ArrowRight": {
-        //w.normal.origin.x += pan;
-        //eye.x += pan;
+      case "6": {
         spheres[1].center.x += pan;
-        renderScene(imageData.data, scene, eye, w);
-        ctx.putImageData(imageData, 0, 0);
+        break;
+      }
+      case "9": {
+        spheres[1].center.z -= pan;
+        break;
+      }
+      case "1": {
+        spheres[1].center.z += pan;
         break;
       }
       default:
         break;
     }
+
+    renderScene(imageData.data, scene, eye, w);
+    ctx.putImageData(imageData, 0, 0);
   });
 }
 

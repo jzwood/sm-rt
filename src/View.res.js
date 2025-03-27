@@ -4,7 +4,7 @@ var spheres = [
   {
     color: [
       255,
-      0,
+      100,
       0,
     ],
     center: {
