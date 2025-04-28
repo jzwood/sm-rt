@@ -244,11 +244,11 @@ let getPixel = (eye: point, scene: scene, window: window, x: int, y: int): rgb =
   pixelToRay(x, y, eye, window)->rayToColor(scene)
 }
 
-let renderScene = (arr: Uint8ClampedArray.t, scene: scene, eye: point, window: window) : unit => {
-  for i in 0 to (window.pxWidth - 1) {
-    for j in 0 to (window.pxHeight - 1) {
+let renderScene = (arr: Uint8ClampedArray.t, scene: scene, eye: point, window: window): unit => {
+  for i in 0 to window.pxWidth - 1 {
+    for j in 0 to window.pxHeight - 1 {
       let (r, g, b) = getPixel(eye, scene, window, i, j)
-      let x = (i + j * window.pxWidth) * 4;
+      let x = (i + j * window.pxWidth) * 4
       TypedArray.set(arr, x + 0, r)
       TypedArray.set(arr, x + 1, g)
       TypedArray.set(arr, x + 2, b)

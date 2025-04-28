@@ -24,3 +24,7 @@ let win: Geometry.window = {
   pxWidth: 400,
   pxHeight: 250,
 }
+
+let white: Geometry.rgb = (255, 255, 255)
+let enamel: Geometry.rgb = (238, 238, 238)
+let dark: Geometry.rgb = (68, 68, 68)
