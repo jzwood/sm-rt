@@ -272,12 +272,15 @@ var white = [
 
 var e = 2.71828;
 
+var pi = 3.14159;
+
 var epsilon = 0.0001;
 
 export {
   black ,
   white ,
   e ,
+  pi ,
   epsilon ,
   vectorEq ,
   sq ,

@@ -2,87 +2,100 @@
 
 import * as Geometry from "./Geometry.res.js";
 
+function toRad(deg) {
+  return deg * Geometry.pi / 180.0;
+}
+
 function toCartesian(param) {
   var radius = param.radius;
-  var phi = param.phi;
-  var theta = param.theta;
+  var t = toRad(param.theta);
+  var p = toRad(param.phi);
   return {
-          dx: radius * Math.sin(theta) * Math.cos(phi),
-          dy: radius * Math.sin(theta) * Math.sin(phi),
-          dz: radius * Math.cos(theta)
+          dx: radius * Math.sin(t) * Math.cos(p),
+          dy: radius * Math.sin(t) * Math.sin(p),
+          dz: radius * Math.cos(t)
         };
 }
 
 function neighbors(param) {
   var radius = param.radius;
   var center = param.center;
+  var color = param.color;
+  var diameter = 2.0 * radius;
   return [
-              {
-                theta: 0.0,
-                phi: 0.0,
-                radius: radius
-              },
-              {
-                theta: 60.0,
-                phi: 0.0,
-                radius: radius
-              },
-              {
-                theta: 120.0,
-                phi: 0.0,
-                radius: radius
-              },
-              {
-                theta: 180.0,
-                phi: 0.0,
-                radius: radius
-              },
-              {
-                theta: 240.0,
-                phi: 0.0,
-                radius: radius
-              },
-              {
-                theta: 300.0,
-                phi: 0.0,
-                radius: radius
-              },
-              {
-                theta: 90.0 + 0.0,
-                phi: 60.0,
-                radius: radius
-              },
-              {
-                theta: 90.0 + 120.0,
-                phi: 60.0,
-                radius: radius
-              },
-              {
-                theta: 90.0 + 240.0,
-                phi: 60.0,
-                radius: radius
-              },
-              {
-                theta: 90.0,
-                phi: -60.0,
-                radius: radius
-              },
-              {
-                theta: 90.0 + 120.0,
-                phi: -60.0,
-                radius: radius
-              },
-              {
-                theta: 90.0 + 240.0,
-                phi: -60.0,
-                radius: radius
-              }
-            ].map(toCartesian).map(function (extra) {
-              return Geometry.plus(center, extra);
+                {
+                  theta: 0.0,
+                  phi: 0.0,
+                  radius: diameter
+                },
+                {
+                  theta: 60.0,
+                  phi: 0.0,
+                  radius: diameter
+                },
+                {
+                  theta: 120.0,
+                  phi: 0.0,
+                  radius: diameter
+                },
+                {
+                  theta: 180.0,
+                  phi: 0.0,
+                  radius: diameter
+                },
+                {
+                  theta: 240.0,
+                  phi: 0.0,
+                  radius: diameter
+                },
+                {
+                  theta: 300.0,
+                  phi: 0.0,
+                  radius: diameter
+                },
+                {
+                  theta: 90.0 + 0.0,
+                  phi: 60.0,
+                  radius: diameter
+                },
+                {
+                  theta: 90.0 + 120.0,
+                  phi: 60.0,
+                  radius: diameter
+                },
+                {
+                  theta: 90.0 + 240.0,
+                  phi: 60.0,
+                  radius: diameter
+                },
+                {
+                  theta: 90.0,
+                  phi: -60.0,
+                  radius: diameter
+                },
+                {
+                  theta: 90.0 + 120.0,
+                  phi: -60.0,
+                  radius: diameter
+                },
+                {
+                  theta: 90.0 + 240.0,
+                  phi: -60.0,
+                  radius: diameter
+                }
+              ].map(toCartesian).map(function (extra) {
+                return Geometry.plus(center, extra);
+              }).map(function (point) {
+              return {
+                      color: color,
+                      center: point,
+                      radius: radius
+                    };
             });
 }
 
 export {
+  toRad ,
   toCartesian ,
   neighbors ,
 }

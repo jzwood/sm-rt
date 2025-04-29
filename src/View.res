@@ -1,8 +1,25 @@
-let eye: Geometry.point = {x: 5.0, y: 5.0, z: 0.0}
-let spheres: array<Geometry.sphere> = [
-  {color: (255, 0, 0), center: {x: 5.0, y: 5.0, z: -20.0}, radius: 5.0},
-  {color: (0, 255, 0), center: {x: 13.0, y: 2.0, z: -19.0}, radius: 2.0},
-]
+let eye: Geometry.point = {x: 5.0, y: 4.5, z: -2.0}
+let centerSphere: Geometry.sphere = {
+  color: (255, 0, 0),
+  center: {x: 5.0, y: 5.0, z: -20.0},
+  radius: 2.0,
+}
+let red: Geometry.rgb = (255, 0, 0)
+let green: Geometry.rgb = (0, 255, 0)
+let blue: Geometry.rgb = (0, 0, 255)
+let yellow: Geometry.rgb = (255, 255, 0)
+let cyan: Geometry.rgb = (0, 255, 255)
+let fuchsia: Geometry.rgb = (255, 0, 255)
+let colors =
+  [red, red, green, green, blue, blue, yellow, yellow, cyan, cyan, fuchsia, fuchsia]->Array.toShuffled
+let spheres: array<Geometry.sphere> =
+  Belt.Array.zip(colors,
+  Polar.neighbors(centerSphere)
+) -> Array.map(((color, { center, radius })) => {
+  let sphere: Geometry.sphere = {center, radius, color}
+  sphere
+})
+
 let planes: array<Geometry.plane> = [
   {
     color: (0, 0, 255),

@@ -1,40 +1,40 @@
-//x = r * Math.sin(θ) * cos(φ)
-//y = r * Math.sin(θ) * sin(φ)
-//z = r*  Math.cos(θ)
-
-//x = r * sin(polar) * cos(alpha)
-//y = r * sin(polar) * sin(alpha)
-//z = r * cos(polar)
-
 type polar = {
   theta: float,
   phi: float,
   radius: float,
 }
 
-//let toPolar = ({x, y, z}: Geometry.point): bool => true
+let toRad = (deg: float): float => deg *. Geometry.pi /. 180.0
 
 let toCartesian = ({theta, phi, radius}: polar): Geometry.vector => {
-  dx: radius *. Math.sin(theta) *. Math.cos(phi),
-  dy: radius *. Math.sin(theta) *. Math.sin(phi),
-  dz: radius *. Math.cos(theta),
+  let t = toRad(theta)
+  let p = toRad(phi)
+  {
+    dx: radius *. Math.sin(t) *. Math.cos(p),
+    dy: radius *. Math.sin(t) *. Math.sin(p),
+    dz: radius *. Math.cos(t),
+  }
 }
 
-let neighbors = ({center, radius}: Geometry.sphere): array<Geometry.point> => {
+//let toSphere = (p: Geometry.point): Geometry.sphere => {center: p, radius: 10.0, color: (0, 0, 0)}
+
+let neighbors = ({center, radius, color}: Geometry.sphere): array<Geometry.sphere> => {
+  let diameter = 2.0 *. radius
   [
-    {theta: 0.0, phi: 0.0, radius},
-    {theta: 60.0, phi: 0.0, radius},
-    {theta: 120.0, phi: 0.0, radius},
-    {theta: 180.0, phi: 0.0, radius},
-    {theta: 240.0, phi: 0.0, radius},
-    {theta: 300.0, phi: 0.0, radius},
-    {theta: 90.0 +. 0.0, phi: 60.0, radius},
-    {theta: 90.0 +. 120.0, phi: 60.0, radius},
-    {theta: 90.0 +. 240.0, phi: 60.0, radius},
-    {theta: 90.0, phi: -60.0, radius},
-    {theta: 90.0 +. 120.0, phi: -60.0, radius},
-    {theta: 90.0 +. 240.0, phi: -60.0, radius},
+    {theta: 0.0, phi: 0.0, radius: diameter},
+    {theta: 60.0, phi: 0.0, radius: diameter},
+    {theta: 120.0, phi: 0.0, radius: diameter},
+    {theta: 180.0, phi: 0.0, radius: diameter},
+    {theta: 240.0, phi: 0.0, radius: diameter},
+    {theta: 300.0, phi: 0.0, radius: diameter},
+    {theta: 90.0 +. 0.0, phi: 60.0, radius: diameter},
+    {theta: 90.0 +. 120.0, phi: 60.0, radius: diameter},
+    {theta: 90.0 +. 240.0, phi: 60.0, radius: diameter},
+    {theta: 90.0, phi: -60.0, radius: diameter},
+    {theta: 90.0 +. 120.0, phi: -60.0, radius: diameter},
+    {theta: 90.0 +. 240.0, phi: -60.0, radius: diameter},
   ]
   ->Array.map(toCartesian)
   ->Array.map(Geometry.plus(center, ...))
+  ->Array.map((point: Geometry.point): Geometry.sphere => {center: point, radius, color})
 }

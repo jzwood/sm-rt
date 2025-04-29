@@ -48,27 +48,35 @@ function main() {
     //console.log(e)
     switch (e.key) {
       case "8": {
-        spheres[1].center.y += pan;
+        eye.x += pan
+        Console.log(eye.x)
+        //spheres[1].center.y += pan;
         break;
       }
       case "2": {
-        spheres[1].center.y -= pan;
+        eye.x -= pan
+        //spheres[1].center.y -= pan;
         break;
       }
       case "4": {
-        spheres[1].center.x -= pan;
+        eye.y += pan
+        //spheres[1].center.x -= pan;
         break;
       }
       case "6": {
-        spheres[1].center.x += pan;
+        eye.y -= pan
+        //spheres[1].center.x += pan;
         break;
       }
       case "9": {
-        spheres[1].center.z -= pan;
+        eye.z += pan
+        //spheres[1].center.z -= pan;
         break;
       }
       case "1": {
-        spheres[1].center.z += pan;
+        eye.z -= pan
+        console.log(eye)
+        //spheres[1].center.z += pan;
         break;
       }
       default:
