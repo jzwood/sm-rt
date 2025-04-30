@@ -11,6 +11,16 @@ var black = [
   0
 ];
 
+function pointEq(p1, p2) {
+  return [
+            p1.x - p2.x,
+            p1.y - p2.y,
+            p1.z - p2.z
+          ].every(function (x) {
+              return Math.abs(x) < 0.0001;
+            });
+}
+
 function vectorEq(v1, v2) {
   return [
             v1.dx - v2.dx,
@@ -276,6 +286,7 @@ export {
   black ,
   white ,
   epsilon ,
+  pointEq ,
   vectorEq ,
   sq ,
   minus ,

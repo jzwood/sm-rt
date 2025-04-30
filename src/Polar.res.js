@@ -24,7 +24,7 @@ function toCartesian(param) {
         };
 }
 
-var tetra = 0.5 * toDeg(Math.acos(-1.0 / 3.0));
+var tetra = toDeg(Math.atan(Math.sqrt(2.0)));
 
 function neighbors(param) {
   var radius = param.radius;
@@ -32,70 +32,67 @@ function neighbors(param) {
   var color = param.color;
   var rho = 2.0 * radius;
   return [
-                  {
-                    theta: 0.0,
-                    phi: 0.0,
-                    rho: rho
-                  },
-                  {
-                    theta: 60.0,
-                    phi: 0.0,
-                    rho: rho
-                  },
-                  {
-                    theta: 120.0,
-                    phi: 0.0,
-                    rho: rho
-                  },
-                  {
-                    theta: 180.0,
-                    phi: 0.0,
-                    rho: rho
-                  },
-                  {
-                    theta: 240.0,
-                    phi: 0.0,
-                    rho: rho
-                  },
-                  {
-                    theta: 300.0,
-                    phi: 0.0,
-                    rho: rho
-                  },
-                  {
-                    theta: 90.0,
-                    phi: tetra,
-                    rho: rho
-                  },
-                  {
-                    theta: 210.0,
-                    phi: tetra,
-                    rho: rho
-                  },
-                  {
-                    theta: 330.0,
-                    phi: tetra,
-                    rho: rho
-                  },
-                  {
-                    theta: 90.0,
-                    phi: -60.0,
-                    rho: rho
-                  },
-                  {
-                    theta: 210.0,
-                    phi: -60.0,
-                    rho: rho
-                  },
-                  {
-                    theta: 330.0,
-                    phi: -60.0,
-                    rho: rho
-                  }
-                ].map(toCartesian).map(function (x) {
-                  console.log(x);
-                  return x;
-                }).map(function (extra) {
+                {
+                  theta: 0.0,
+                  phi: 0.0,
+                  rho: rho
+                },
+                {
+                  theta: 60.0,
+                  phi: 0.0,
+                  rho: rho
+                },
+                {
+                  theta: 120.0,
+                  phi: 0.0,
+                  rho: rho
+                },
+                {
+                  theta: 180.0,
+                  phi: 0.0,
+                  rho: rho
+                },
+                {
+                  theta: 240.0,
+                  phi: 0.0,
+                  rho: rho
+                },
+                {
+                  theta: 300.0,
+                  phi: 0.0,
+                  rho: rho
+                },
+                {
+                  theta: 90.0,
+                  phi: tetra,
+                  rho: rho
+                },
+                {
+                  theta: 210.0,
+                  phi: tetra,
+                  rho: rho
+                },
+                {
+                  theta: 330.0,
+                  phi: tetra,
+                  rho: rho
+                },
+                {
+                  theta: 90.0,
+                  phi: -1.0 * tetra,
+                  rho: rho
+                },
+                {
+                  theta: 210.0,
+                  phi: -1.0 * tetra,
+                  rho: rho
+                },
+                {
+                  theta: 330.0,
+                  phi: -1.0 * tetra,
+                  rho: rho
+                }
+              ].map(toCartesian).map(function (extra) {
                 return Geometry.plus(center, extra);
               }).map(function (point) {
               return {

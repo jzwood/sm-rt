@@ -60,8 +60,8 @@ type window = {
 
 let epsilon = 0.0001
 
-//let pointEq = (p1: point, p2: point): bool =>
-//[p1.x -. p2.x, p1.y -. p2.y, p1.z -. p2.z]->Array.every(x => Math.abs(x) < epsilon)
+let pointEq = (p1: point, p2: point): bool =>
+  [p1.x -. p2.x, p1.y -. p2.y, p1.z -. p2.z]->Array.every(x => Math.abs(x) < epsilon)
 
 let vectorEq = (v1: vector, v2: vector): bool =>
   [v1.dx -. v2.dx, v1.dy -. v2.dy, v1.dz -. v2.dz]->Array.every(x => Math.abs(x) < epsilon)

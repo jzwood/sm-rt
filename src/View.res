@@ -13,33 +13,32 @@ let win: Geometry.window = {
 
 //let eye: Geometry.point = {x: 35.0, y: 0.0, z: 0.0}
 //let win: Geometry.window = {
-  //normal: {
-    //origin: {x: 25.0, y: 0.0, z: 0.0},
-    //vector: {dx: 1.0, dy: 0.0, dz: 0.0},
-  //},
-  //up: {dx: 0.0, dy: 1.0, dz: 0.0},
-  //width: 8.0,
-  //height: 5.0,
-  //pxWidth: 400,
-  //pxHeight: 250,
+//normal: {
+//origin: {x: 25.0, y: 0.0, z: 0.0},
+//vector: {dx: 1.0, dy: 0.0, dz: 0.0},
+//},
+//up: {dx: 0.0, dy: 1.0, dz: 0.0},
+//width: 8.0,
+//height: 5.0,
+//pxWidth: 400,
+//pxHeight: 250,
 //}
-
 
 //let eye: Geometry.point = {x: 0.0, y: 0.0, z: 35.0}
 //let win: Geometry.window = {
-  //normal: {
-    //origin: {x: 0.0, y: 0.0, z: 25.0},
-    //vector: {dx: 0.0, dy: 0.0, dz: -1.0},
-  //},
-  //up: {dx: 0.0, dy: 1.0, dz: 0.0},
-  //width: 8.0,
-  //height: 5.0,
-  //pxWidth: 400,
-  //pxHeight: 250,
+//normal: {
+//origin: {x: 0.0, y: 0.0, z: 25.0},
+//vector: {dx: 0.0, dy: 0.0, dz: -1.0},
+//},
+//up: {dx: 0.0, dy: 1.0, dz: 0.0},
+//width: 8.0,
+//height: 5.0,
+//pxWidth: 400,
+//pxHeight: 250,
 //}
 
 let centerSphere: Geometry.sphere = {
-  color: (100, 100, 100),
+  color: (255, 0, 0),
   center: {x: 0.0, y: 0.0, z: 0.0},
   radius: 2.0,
 }
@@ -49,7 +48,8 @@ let blue: Geometry.rgb = (0, 0, 255)
 let yellow: Geometry.rgb = (255, 255, 0)
 let cyan: Geometry.rgb = (0, 255, 255)
 let fuchsia: Geometry.rgb = (255, 0, 255)
-let colors: array<Geometry.rgb> = [
+let colors: array<Geometry.rgb> =
+  [
     (255, 0, 0),
     (0, 255, 0),
     (0, 0, 255),
@@ -64,12 +64,26 @@ let colors: array<Geometry.rgb> = [
     (100, 0, 100),
   ]->Array.toShuffled
 let spheres: array<Geometry.sphere> =
-  Belt.Array.zip(colors, Polar.neighbors(centerSphere))
-  ->Array.map(((color, {center, radius})) => {
+  Polar.neighbors(centerSphere)
+  //->Array.flatMap(sphere => Polar.neighbors(sphere))
+  ->Array.map(({center, radius}) => {
+    let color = (Math.Int.random(0, 256), Math.Int.random(0, 256), Math.Int.random(0, 256))
     let sphere: Geometry.sphere = {center, radius, color}
     sphere
   })
-  ->(spheres => [centerSphere, ...spheres])
+  ->Array.toSorted((a, b) => Geometry.minus(a.center, b.center)->Geometry.magnitude)
+  ->(x => {
+    Console.log(x)
+    x
+  })
+  ->Utils.dedupe((a, b) => Geometry.pointEq(a.center, b.center))
+  ->(
+    x => {
+      Console.log(x)
+      x
+    }
+  )
+//->(spheres => [centerSphere, ...spheres])
 
 let planes: array<Geometry.plane> = [
   //{
