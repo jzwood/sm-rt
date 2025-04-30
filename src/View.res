@@ -1,6 +1,45 @@
-let eye: Geometry.point = {x: 0.0, y: 25.0, z: 0.0}
+let eye: Geometry.point = {x: 0.0, y: 35.0, z: 0.0}
+let win: Geometry.window = {
+  normal: {
+    origin: {x: 0.0, y: 25.0, z: 0.0},
+    vector: {dx: 0.0, dy: -1.0, dz: 0.0},
+  },
+  up: {dx: 1.0, dy: 0.0, dz: 0.0},
+  width: 8.0,
+  height: 5.0,
+  pxWidth: 400,
+  pxHeight: 250,
+}
+
+//let eye: Geometry.point = {x: 35.0, y: 0.0, z: 0.0}
+//let win: Geometry.window = {
+  //normal: {
+    //origin: {x: 25.0, y: 0.0, z: 0.0},
+    //vector: {dx: 1.0, dy: 0.0, dz: 0.0},
+  //},
+  //up: {dx: 0.0, dy: 1.0, dz: 0.0},
+  //width: 8.0,
+  //height: 5.0,
+  //pxWidth: 400,
+  //pxHeight: 250,
+//}
+
+
+//let eye: Geometry.point = {x: 0.0, y: 0.0, z: 35.0}
+//let win: Geometry.window = {
+  //normal: {
+    //origin: {x: 0.0, y: 0.0, z: 25.0},
+    //vector: {dx: 0.0, dy: 0.0, dz: -1.0},
+  //},
+  //up: {dx: 0.0, dy: 1.0, dz: 0.0},
+  //width: 8.0,
+  //height: 5.0,
+  //pxWidth: 400,
+  //pxHeight: 250,
+//}
+
 let centerSphere: Geometry.sphere = {
-  color: (255, 0, 0),
+  color: (100, 100, 100),
   center: {x: 0.0, y: 0.0, z: 0.0},
   radius: 2.0,
 }
@@ -41,18 +80,6 @@ let planes: array<Geometry.plane> = [
 ]
 
 let scene: Geometry.scene = {spheres, triangles: [], planes}
-
-let win: Geometry.window = {
-  normal: {
-    origin: {x: 0.0, y: 15.0, z: 0.0},
-    vector: {dx: 0.0, dy: -1.0, dz: 0.0},
-  },
-  up: {dx: 1.0, dy: 0.0, dz: 0.0},
-  width: 8.0,
-  height: 5.0,
-  pxWidth: 400,
-  pxHeight: 250,
-}
 
 let white: Geometry.rgb = (255, 255, 255)
 let enamel: Geometry.rgb = (238, 238, 238)

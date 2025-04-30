@@ -1,5 +1,6 @@
 import { getPixel, renderScene } from "./Geometry.res.js";
-import { eye, spheres, planes, scene, win } from './View.res.js'
+import { eye, scene, win } from './View.res.js'
+import { toCartesian } from './Polar.res.js'
 
 function main() {
   console.log("hi mom");
@@ -35,7 +36,6 @@ function main() {
   canvas.width = width;
   canvas.height = height;
   canvas.style.transform = `scale(${scale})`;
-  const pan = 0.1;
 
   const ctx = canvas.getContext("2d", { alpha: false });
 
@@ -43,45 +43,45 @@ function main() {
   renderScene(imageData.data, scene, eye, w);
   ctx.putImageData(imageData, 0, 0);
 
+  let theta = 0
+  let phi = 0
+  let rho = 4
+  let pan = 10;
+  let index = 1
   document.addEventListener("keydown", (e) => {
     e.preventDefault();
-    //console.log(e)
+    console.log(e.key, typeof e.key)
     switch (e.key) {
-      case "8": {
-        eye.x += pan
-        Console.log(eye.x)
-        //spheres[1].center.y += pan;
+      case "ArrowLeft": {
+        theta += pan
         break;
       }
-      case "2": {
-        eye.x -= pan
-        //spheres[1].center.y -= pan;
+      case "ArrowRight": {
+        theta -= pan
         break;
       }
-      case "4": {
-        eye.y += pan
-        //spheres[1].center.x -= pan;
+      case "ArrowUp": {
+        phi += pan
         break;
       }
-      case "6": {
-        eye.y -= pan
-        //spheres[1].center.x += pan;
-        break;
-      }
-      case "9": {
-        eye.z += pan
-        //spheres[1].center.z -= pan;
-        break;
-      }
-      case "1": {
-        eye.z -= pan
-        console.log(eye)
-        //spheres[1].center.z += pan;
+      case "ArrowDown": {
+        phi -= pan
         break;
       }
       default:
+        let i = /^\d$/.test(e.key) && parseInt(e.key)
+        if (i) {
+          index = i
+          theta = 0
+          phi = 0
+        }
         break;
     }
+
+    let { dx, dy, dz} = toCartesian({theta, phi, rho})
+    scene.spheres.at(index).center.x = dx
+    scene.spheres.at(index).center.y = dy
+    scene.spheres.at(index).center.z = dz
 
     renderScene(imageData.data, scene, eye, w);
     ctx.putImageData(imageData, 0, 0);

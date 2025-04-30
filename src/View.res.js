@@ -6,9 +6,9 @@ import * as Core__Array from "@rescript/core/src/Core__Array.res.js";
 
 var centerSphere = {
   color: [
-    255,
-    0,
-    0
+    100,
+    100,
+    100
   ],
   center: {
     x: 0.0,
@@ -107,8 +107,32 @@ var scene = {
 
 var eye = {
   x: 0.0,
-  y: 25.0,
+  y: 35.0,
   z: 0.0
+};
+
+var win = {
+  normal: {
+    origin: {
+      x: 0.0,
+      y: 25.0,
+      z: 0.0
+    },
+    vector: {
+      dx: 0.0,
+      dy: -1.0,
+      dz: 0.0
+    }
+  },
+  up: {
+    dx: 1.0,
+    dy: 0.0,
+    dz: 0.0
+  },
+  width: 8.0,
+  height: 5.0,
+  pxWidth: 400,
+  pxHeight: 250
 };
 
 var red = [
@@ -147,30 +171,6 @@ var fuchsia = [
   255
 ];
 
-var win = {
-  normal: {
-    origin: {
-      x: 0.0,
-      y: 15.0,
-      z: 0.0
-    },
-    vector: {
-      dx: 0.0,
-      dy: -1.0,
-      dz: 0.0
-    }
-  },
-  up: {
-    dx: 1.0,
-    dy: 0.0,
-    dz: 0.0
-  },
-  width: 8.0,
-  height: 5.0,
-  pxWidth: 400,
-  pxHeight: 250
-};
-
 var white = [
   255,
   255,
@@ -191,6 +191,7 @@ var dark = [
 
 export {
   eye ,
+  win ,
   centerSphere ,
   red ,
   green ,
@@ -202,7 +203,6 @@ export {
   spheres ,
   planes ,
   scene ,
-  win ,
   white ,
   enamel ,
   dark ,
