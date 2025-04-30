@@ -6,6 +6,10 @@ function toRad(deg) {
   return deg * Math.PI / 180.0;
 }
 
+function toDeg(rad) {
+  return rad * 180.0 / Math.PI;
+}
+
 function toCartesian(param) {
   var rho = param.rho;
   var theta = toRad(param.theta);
@@ -19,6 +23,8 @@ function toCartesian(param) {
           dz: z
         };
 }
+
+var tetra = 0.5 * toDeg(Math.acos(-1.0 / 3.0));
 
 function neighbors(param) {
   var radius = param.radius;
@@ -58,17 +64,32 @@ function neighbors(param) {
                   },
                   {
                     theta: 90.0,
-                    phi: 60.0,
+                    phi: tetra,
                     rho: rho
                   },
                   {
                     theta: 210.0,
-                    phi: 60.0,
+                    phi: tetra,
                     rho: rho
                   },
                   {
                     theta: 330.0,
-                    phi: 60.0,
+                    phi: tetra,
+                    rho: rho
+                  },
+                  {
+                    theta: 90.0,
+                    phi: -60.0,
+                    rho: rho
+                  },
+                  {
+                    theta: 210.0,
+                    phi: -60.0,
+                    rho: rho
+                  },
+                  {
+                    theta: 330.0,
+                    phi: -60.0,
                     rho: rho
                   }
                 ].map(toCartesian).map(function (x) {
@@ -87,7 +108,9 @@ function neighbors(param) {
 
 export {
   toRad ,
+  toDeg ,
   toCartesian ,
+  tetra ,
   neighbors ,
 }
-/* No side effect */
+/* tetra Not a pure module */

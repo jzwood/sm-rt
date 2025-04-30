@@ -5,6 +5,7 @@ type polar = {
 }
 
 let toRad = (deg: float): float => deg *. Math.Constants.pi /. 180.0
+let toDeg = (rad: float): float => rad *. 180.0 /. Math.Constants.pi
 
 /*
  *           Y
@@ -29,26 +30,10 @@ let toCartesian = ({theta: tdeg, phi: pdeg, rho}: polar): Geometry.vector => {
 
 //let toSphere = (p: Geometry.point): Geometry.sphere => {center: p, radius: 10.0, color: (0, 0, 0)}
 
+let tetra = 0.5 *. toDeg(Math.acos(-1.0 /. 3.0))
 let neighbors = ({center, radius, color}: Geometry.sphere): array<Geometry.sphere> => {
   let rho = 2.0 *. radius
   [
-    //{theta: 0.0, phi: 0.0, rho},
-    //{theta: 60.0, phi: 0.0, rho},
-    //{theta: 120.0, phi: 0.0, rho},
-    //{theta: 180.0, phi: 0.0, rho},
-    //{theta: 240.0, phi: 0.0, rho},
-    //{theta: 300.0, phi: 0.0, rho},
-
-    //{theta: 90.0 +. 0.0, phi: 45.0, rho},
-    //{theta: 90.0 +. 120.0, phi: 45.0, rho},
-    //{theta: 90.0 +. 240.0, phi: 45.0, rho},
-
-    //{theta: 90.0, phi: -45.0, rho},
-    //{theta: 90.0 +. 120.0, phi: -45.0, rho},
-    //{theta: 90.0 +. 240.0, phi: -45.0, rho},
-
-    // ^^^ OLD
-
     {rho, theta: 0.0, phi: 0.0},
     {rho, theta: 60.0, phi: 0.0},
     {rho, theta: 120.0, phi: 0.0},
@@ -56,13 +41,13 @@ let neighbors = ({center, radius, color}: Geometry.sphere): array<Geometry.spher
     {rho, theta: 240.0, phi: 0.0},
     {rho, theta: 300.0, phi: 0.0},
 
-    {rho, theta: 90.0, phi: 60.0},
-    {rho, theta: 210.0, phi: 60.0},
-    {rho, theta: 330.0, phi: 60.0},
+    {rho, theta: 90.0, phi: tetra},
+    {rho, theta: 210.0, phi: tetra},
+    {rho, theta: 330.0, phi: tetra},
 
-    //{rho, theta: 90.0, phi: -60.0},
-    //{rho, theta: 210.0, phi: -60.0},
-    //{rho, theta: 330.0, phi: -60.0},
+    {rho, theta: 90.0, phi: -60.0},
+    {rho, theta: 210.0, phi: -60.0},
+    {rho, theta: 330.0, phi: -60.0},
   ]
   ->Array.map(toCartesian)
   ->Array.map(x => {
