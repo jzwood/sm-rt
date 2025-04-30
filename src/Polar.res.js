@@ -25,11 +25,53 @@ function neighbors(param) {
   var center = param.center;
   var color = param.color;
   var rho = 2.0 * radius;
-  return [{
+  return [
+                  {
                     theta: 0.0,
                     phi: 0.0,
                     rho: rho
-                  }].map(toCartesian).map(function (x) {
+                  },
+                  {
+                    theta: 60.0,
+                    phi: 0.0,
+                    rho: rho
+                  },
+                  {
+                    theta: 120.0,
+                    phi: 0.0,
+                    rho: rho
+                  },
+                  {
+                    theta: 180.0,
+                    phi: 0.0,
+                    rho: rho
+                  },
+                  {
+                    theta: 240.0,
+                    phi: 0.0,
+                    rho: rho
+                  },
+                  {
+                    theta: 300.0,
+                    phi: 0.0,
+                    rho: rho
+                  },
+                  {
+                    theta: 90.0,
+                    phi: 60.0,
+                    rho: rho
+                  },
+                  {
+                    theta: 210.0,
+                    phi: 60.0,
+                    rho: rho
+                  },
+                  {
+                    theta: 330.0,
+                    phi: 60.0,
+                    rho: rho
+                  }
+                ].map(toCartesian).map(function (x) {
                   console.log(x);
                   return x;
                 }).map(function (extra) {

@@ -47,16 +47,18 @@ let neighbors = ({center, radius, color}: Geometry.sphere): array<Geometry.spher
     //{theta: 90.0 +. 120.0, phi: -45.0, rho},
     //{theta: 90.0 +. 240.0, phi: -45.0, rho},
 
-    {rho, theta: 0.0, phi: 0.0},
-    //{rho, theta: 60.0, phi: 0.0},
-    //{rho, theta: 120.0, phi: 0.0},
-    //{rho, theta: 180.0, phi: 0.0},
-    //{rho, theta: 240.0, phi: 0.0},
-    //{rho, theta: 300.0, phi: 0.0},
+    // ^^^ OLD
 
-    //{rho, theta: 90.0, phi: 60.0},
-    //{rho, theta: 210.0, phi: 60.0},
-    //{rho, theta: 330.0, phi: 60.0},
+    {rho, theta: 0.0, phi: 0.0},
+    {rho, theta: 60.0, phi: 0.0},
+    {rho, theta: 120.0, phi: 0.0},
+    {rho, theta: 180.0, phi: 0.0},
+    {rho, theta: 240.0, phi: 0.0},
+    {rho, theta: 300.0, phi: 0.0},
+
+    {rho, theta: 90.0, phi: 60.0},
+    {rho, theta: 210.0, phi: 60.0},
+    {rho, theta: 330.0, phi: 60.0},
 
     //{rho, theta: 90.0, phi: -60.0},
     //{rho, theta: 210.0, phi: -60.0},
