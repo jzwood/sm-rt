@@ -3,7 +3,7 @@
 import * as Geometry from "./Geometry.res.js";
 
 function toRad(deg) {
-  return deg * Geometry.pi / 180.0;
+  return deg * Math.PI / 180.0;
 }
 
 function toCartesian(param) {
@@ -11,9 +11,9 @@ function toCartesian(param) {
   var t = toRad(param.theta);
   var p = toRad(param.phi);
   return {
-          dx: radius * Math.sin(t) * Math.cos(p),
-          dy: radius * Math.sin(t) * Math.sin(p),
-          dz: radius * Math.cos(t)
+          dx: radius * Math.cos(p) * Math.cos(t),
+          dy: radius * Math.sin(p),
+          dz: radius * Math.cos(p) * Math.sin(t)
         };
 }
 
@@ -55,32 +55,17 @@ function neighbors(param) {
                 },
                 {
                   theta: 90.0 + 0.0,
-                  phi: 60.0,
+                  phi: 55.0,
                   radius: diameter
                 },
                 {
                   theta: 90.0 + 120.0,
-                  phi: 60.0,
+                  phi: 55.0,
                   radius: diameter
                 },
                 {
                   theta: 90.0 + 240.0,
-                  phi: 60.0,
-                  radius: diameter
-                },
-                {
-                  theta: 90.0,
-                  phi: -60.0,
-                  radius: diameter
-                },
-                {
-                  theta: 90.0 + 120.0,
-                  phi: -60.0,
-                  radius: diameter
-                },
-                {
-                  theta: 90.0 + 240.0,
-                  phi: -60.0,
+                  phi: 55.0,
                   radius: diameter
                 }
               ].map(toCartesian).map(function (extra) {

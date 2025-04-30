@@ -58,8 +58,6 @@ type window = {
   pxHeight: int,
 }
 
-let e = 2.71828 // euler's number
-let pi = 3.14159
 let epsilon = 0.0001
 
 //let pointEq = (p1: point, p2: point): bool =>

@@ -11,11 +11,104 @@ var centerSphere = {
     0
   ],
   center: {
-    x: 5.0,
-    y: 5.0,
-    z: -20.0
+    x: 0.0,
+    y: 0.0,
+    z: 0.0
   },
   radius: 2.0
+};
+
+var colors = Core__Array.toShuffled([
+      [
+        255,
+        0,
+        0
+      ],
+      [
+        0,
+        255,
+        0
+      ],
+      [
+        0,
+        0,
+        255
+      ],
+      [
+        255,
+        255,
+        0
+      ],
+      [
+        0,
+        255,
+        255
+      ],
+      [
+        255,
+        0,
+        255
+      ],
+      [
+        100,
+        0,
+        0
+      ],
+      [
+        0,
+        100,
+        0
+      ],
+      [
+        0,
+        0,
+        100
+      ],
+      [
+        100,
+        100,
+        0
+      ],
+      [
+        0,
+        100,
+        100
+      ],
+      [
+        100,
+        0,
+        100
+      ]
+    ]);
+
+var spheres = (function (spheres) {
+      return Belt_Array.concatMany([
+                  [centerSphere],
+                  spheres
+                ]);
+    })(Belt_Array.zip(colors, Polar.neighbors(centerSphere)).map(function (param) {
+          var match = param[1];
+          return {
+                  color: param[0],
+                  center: match.center,
+                  radius: match.radius
+                };
+        }));
+
+var planes = [];
+
+var scene_triangles = [];
+
+var scene = {
+  spheres: spheres,
+  triangles: scene_triangles,
+  planes: planes
+};
+
+var eye = {
+  x: 0.0,
+  y: 25.0,
+  z: 0.0
 };
 
 var red = [
@@ -54,82 +147,26 @@ var fuchsia = [
   255
 ];
 
-var colors = Core__Array.toShuffled([
-      red,
-      red,
-      green,
-      green,
-      blue,
-      blue,
-      yellow,
-      yellow,
-      cyan,
-      cyan,
-      fuchsia,
-      fuchsia
-    ]);
-
-var spheres = Belt_Array.zip(colors, Polar.neighbors(centerSphere)).map(function (param) {
-      var match = param[1];
-      return {
-              color: param[0],
-              center: match.center,
-              radius: match.radius
-            };
-    });
-
-var planes = [{
-    color: [
-      0,
-      0,
-      255
-    ],
-    center: {
-      x: 0.0,
-      y: 0.0,
-      z: 0.0
-    },
-    normal: {
-      dx: 0.0,
-      dy: 1.0,
-      dz: 0.0
-    }
-  }];
-
-var scene_triangles = [];
-
-var scene = {
-  spheres: spheres,
-  triangles: scene_triangles,
-  planes: planes
-};
-
-var eye = {
-  x: 5.0,
-  y: 4.5,
-  z: -2.0
-};
-
 var win = {
   normal: {
     origin: {
-      x: 5.2,
-      y: 4.5,
-      z: -5.0
+      x: 0.0,
+      y: 15.0,
+      z: 0.0
     },
     vector: {
       dx: 0.0,
-      dy: 0.0,
-      dz: -1.0
+      dy: -1.0,
+      dz: 0.0
     }
   },
   up: {
-    dx: 0.0,
-    dy: 1.0,
+    dx: 1.0,
+    dy: 0.0,
     dz: 0.0
   },
-  width: 4.0,
-  height: 2.5,
+  width: 8.0,
+  height: 5.0,
   pxWidth: 400,
   pxHeight: 250
 };
