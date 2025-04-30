@@ -89,7 +89,9 @@ var spheres = (function (x) {
     })(Utils.dedupe((function (x) {
               console.log(x);
               return x;
-            })(Polar.neighbors(centerSphere).map(function (param) {
+            })(Polar.neighbors(centerSphere).flatMap(function (sphere) {
+                      return Polar.neighbors(sphere);
+                    }).map(function (param) {
                     var color_0 = Core__Math.Int.random(0, 256);
                     var color_1 = Core__Math.Int.random(0, 256);
                     var color_2 = Core__Math.Int.random(0, 256);

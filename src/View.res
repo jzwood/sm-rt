@@ -65,7 +65,7 @@ let colors: array<Geometry.rgb> =
   ]->Array.toShuffled
 let spheres: array<Geometry.sphere> =
   Polar.neighbors(centerSphere)
-  //->Array.flatMap(sphere => Polar.neighbors(sphere))
+  ->Array.flatMap(sphere => Polar.neighbors(sphere))
   ->Array.map(({center, radius}) => {
     let color = (Math.Int.random(0, 256), Math.Int.random(0, 256), Math.Int.random(0, 256))
     let sphere: Geometry.sphere = {center, radius, color}
