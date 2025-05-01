@@ -1,7 +1,7 @@
 let eye: Geometry.point = {x: 0.0, y: 35.0, z: 0.0}
 let win: Geometry.window = {
   normal: {
-    origin: {x: 0.0, y: 25.0, z: 0.0},
+    origin: {x: 0.0, y: 30.0, z: 0.0},
     vector: {dx: 0.0, dy: -1.0, dz: 0.0},
   },
   up: {dx: 1.0, dy: 0.0, dz: 0.0},
@@ -70,11 +70,6 @@ let spheres: array<Geometry.sphere> =
     let color = (Math.Int.random(0, 256), Math.Int.random(0, 256), Math.Int.random(0, 256))
     let sphere: Geometry.sphere = {center, radius, color}
     sphere
-  })
-  ->Array.toSorted((a, b) => Geometry.minus(a.center, b.center)->Geometry.magnitude)
-  ->(x => {
-    Console.log(x)
-    x
   })
   ->Utils.dedupe((a, b) => Geometry.pointEq(a.center, b.center))
   ->(

@@ -86,28 +86,23 @@ var colors = Core__Array.toShuffled([
 var spheres = (function (x) {
       console.log(x);
       return x;
-    })(Utils.dedupe((function (x) {
-              console.log(x);
-              return x;
-            })(Polar.neighbors(centerSphere).flatMap(function (sphere) {
-                      return Polar.neighbors(sphere);
-                    }).map(function (param) {
-                    var color_0 = Core__Math.Int.random(0, 256);
-                    var color_1 = Core__Math.Int.random(0, 256);
-                    var color_2 = Core__Math.Int.random(0, 256);
-                    var color = [
-                      color_0,
-                      color_1,
-                      color_2
-                    ];
-                    return {
-                            color: color,
-                            center: param.center,
-                            radius: param.radius
-                          };
-                  }).toSorted(function (a, b) {
-                  return Geometry.magnitude(Geometry.minus(a.center, b.center));
-                })), (function (a, b) {
+    })(Utils.dedupe(Polar.neighbors(centerSphere).flatMap(function (sphere) {
+                return Polar.neighbors(sphere);
+              }).map(function (param) {
+              var color_0 = Core__Math.Int.random(0, 256);
+              var color_1 = Core__Math.Int.random(0, 256);
+              var color_2 = Core__Math.Int.random(0, 256);
+              var color = [
+                color_0,
+                color_1,
+                color_2
+              ];
+              return {
+                      color: color,
+                      center: param.center,
+                      radius: param.radius
+                    };
+            }), (function (a, b) {
             return Geometry.pointEq(a.center, b.center);
           })));
 
@@ -131,7 +126,7 @@ var win = {
   normal: {
     origin: {
       x: 0.0,
-      y: 25.0,
+      y: 30.0,
       z: 0.0
     },
     vector: {

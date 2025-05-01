@@ -23,24 +23,17 @@ function inspect(x) {
 }
 
 function dedupe(arr, eq) {
-  return Core__Array.reduce(arr, [], (function (acc, s1) {
-                var s2 = acc[0];
-                if (s2 !== undefined) {
-                  if (eq(Caml_option.valFromOption(s2), s1)) {
-                    return acc;
-                  } else {
-                    return Belt_Array.concatMany([
-                                [s1],
-                                acc
-                              ]);
-                  }
-                } else {
-                  return Belt_Array.concatMany([
-                              [s1],
-                              acc
-                            ]);
-                }
-              }));
+  var x = arr[0];
+  if (x === undefined) {
+    return [];
+  }
+  var x$1 = Caml_option.valFromOption(x);
+  return Belt_Array.concatMany([
+              [x$1],
+              dedupe(arr.slice(1).filter(function (y) {
+                        return !eq(x$1, y);
+                      }), eq)
+            ]);
 }
 
 export {
